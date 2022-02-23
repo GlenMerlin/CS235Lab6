@@ -10,60 +10,66 @@ class LinkedList : public LinkedListInterface<T>{
         struct Node {
             T data;
             Node *next;
-            Node(const T& the_data, Node* head = NULL, Node* next_val = NULL, Node* tail = NULL) : data(the_data) {next = next_val;}
+            
+            explicit Node(T data) : data(data), next(nullptr) {};
         };
-            Node* list;
-            int items;
+
+        Node* head;
+        int dataSize;
     public:
         LinkedList(){
-            list = NULL;
-            items = 0;
+            head = nullptr;
+            dataSize = 0;
         };
         ~LinkedList(void) override{
-            while(list != NULL) {
-			    Node *current = list;
-			    list = list->next;
-			    delete current;
-		    }
+            clear();
         };
         
         void insertHead(T value) override{
             cout << "inside the insertHead function" << endl;
-            if (items == 0){
-              cout << "inserting into an empty array" << endl;  
+            Node* headToInsert = new Node(value);
+            if (!isEmpty()){
+                head = headToInsert;
+                dataSize++;
+                cout << "inserting into an empty array" << endl;  
             }
-            Node *pointer = list;
-            list = new Node(value);
-            list->next = pointer;
-            items++;
-            cout << "successfully completed the insertHead function" << endl;
+            else if(!existCheck(value)) {
 
+            }
         };
         void insertTail(T value) override{
+            // TODO: Make this actually work
             cout << "inside the insetTail function" << endl;
-            Node *pointer = list;
-            list = new Node(value);
-            items++;
+            dataSize++;
             cout << "successfully completed the insertHead function" << endl;
 
         };
         void insertAfter(T value, T insertionNode) override{
-            items++;
+            // TODO: Make this actually work
+            dataSize++;
         };
         void remove(T value) override{
-            items--;
+            // TODO: Make this actually work
+            dataSize--;
         };
         void clear() override{
-            list = NULL;
-            items = 0;
-        };
+            cout << "Inside the clear function" << endl;
+        // TODO: This probably doesn't work until the rest of the methods are implemented to make sure that it's actually incrementing and decrementing dataSize
+        //     for (int i = 0; i < dataSize; i++){
+        //         Node* temp = head;
+        //         head = head->next;
+        //         delete temp;
+        //         dataSize--;
+        //     }
+         };
         T at(int index) override {
             cout << "inside the at function"<< endl;
-            if (index >= items || index < 0){
+            if (index >= dataSize || index < 0){
                 throw std::out_of_range("AT Error");
             }
             else {
-                Node *pointer = list;
+                // TODO: Make this actually work
+                Node *pointer = head;
                 for (int i = 0; i < index; i++){
                     if (i == index){
                         return pointer->data;
@@ -78,22 +84,44 @@ class LinkedList : public LinkedListInterface<T>{
             }
             
         };
-        int size() override {
-            int size = 0;
-            for (Node *pointer = list; pointer != NULL; pointer = pointer->next){
-                size++;
-            }
-            cout << size << endl;
-            return size;
-        };
-        string toString() override{
-            stringstream ss;
-            for (Node *pointer = list; pointer != NULL; pointer = pointer->next){
-                // TODO: refactor this into the proper format, this is just in this format for testing purposes
-                ss << "pointer " << pointer << " val " << pointer->data << " next " << pointer->next << endl;
-                cout << "pointer " << pointer << " val " << pointer->data << " next " << pointer->next << endl;
-            }
-            return (ss.str());
-        };
         
+        int size() override {
+            cout << "Inside the size function. Size: " << dataSize << endl;
+            return dataSize;
+        };
+
+        string toString() override{
+            cout << "Inside the toString function" << endl;
+            if (!isEmpty()){
+                stringstream ss;
+                for (Node *pointer = head; pointer != nullptr; pointer = pointer->next){
+                    // TODO: refactor this into the proper format, this is just in this format for testing purposes
+                    cout << "pointer " << pointer << " val " << pointer->data << " next " << pointer->next << endl;
+                    ss << "pointer " << pointer << " val " << pointer->data << " next " << pointer->next << endl;
+                }
+                return (ss.str());
+            }
+            else {
+                return "";
+            }
+            
+        };
+
+        bool isEmpty() const {
+            cout << "Inside the isEmpty function" << endl;
+            if (dataSize <= 0 || head == nullptr){
+                return true;
+            };
+            return false;
+        }
+
+        bool existCheck(T value) const {
+            cout << "Inside the existCheck function" << endl;
+            for (Node *pointer = head; pointer != nullptr; pointer = pointer->next){
+                if (pointer->data == value){
+                    return true;
+                };
+            }
+            return false;
+        }
 };
