@@ -16,18 +16,22 @@ class LinkedList : public LinkedListInterface<T>{
 
         Node* head;
         int dataSize;
+        int location;
         
     public:
         LinkedList(){
             head = nullptr;
             dataSize = 0;
+            location = 0;
         };
         ~LinkedList(void) override{
             clear();
         };
-        int location = 0;
+ 
+
         void insertHead(T value) override{
             // cout << "inside the insertHead function" << endl;
+            cout << "value is: " << value << endl;
             Node* headToInsert = new Node(value);
             if (!isEmpty()){
                 head = headToInsert;
@@ -41,49 +45,66 @@ class LinkedList : public LinkedListInterface<T>{
                 dataSize++;
                 cout << "insertHead is increasing the count: " << dataSize << endl;
             }
+            else {
+                delete headToInsert;
+            }
         };
+
         void insertTail(T value) override{
             // TODO: Make this actually work
             // cout << "inside the insetTail function" << endl;
-            if (!isEmpty()){
-                Node* tailToInsert = new Node(value);
-                dataSize++;
-                cout << "insertTail is increasing the count: " << dataSize << endl;
+            cout << "value is: " << value << endl;
+            if (isEmpty()){
+                insertHead(value);
             }
-            else {
-                if (!existCheck(value) && location < dataSize){
-
+            else if (!existCheck(value)){
+                    
                     Node* tailToInsert = new Node(value);
-                    Node *pointer;
-                    for (pointer = head; pointer != nullptr; pointer = pointer->next);
+                    Node* pointer;
+
+                    for (pointer = head; pointer->next != nullptr; pointer = pointer->next);
+                        
                     pointer->next = tailToInsert;
                     dataSize++;
+
                     cout << "insertTail is increasing the count: " << dataSize << endl;
-                }
             }
-            // cout << "successfully completed the insertHead function" << endl;
 
         };
+
         void insertAfter(T value, T insertionNode) override{
-            if (!existCheck(insertionNode)){
+            if (existCheck(insertionNode) && !existCheck(value)){
+                cout << "value is: " << value << endl;
                 cout << "location is: " << location << endl;
                 cout << "dataSize is: " << dataSize << endl;
-                if (location < dataSize){
+                existCheck(insertionNode);
+                cout << "after location is: " << location << endl;
+                cout << "after dataSize is: " << dataSize << endl;
+                if (location <= dataSize){
+
                     Node* valToInsert = new Node(value);
-                    Node* pointer = head;
-                    pointer->next = valToInsert;
-                    valToInsert->next = pointer;
+                    Node* insertLoc = head;
+
+                    for (int i = 0; i < location; i++){
+                        insertLoc = insertLoc->next;
+                    }
+
+                    valToInsert->next = insertLoc->next;
+                    insertLoc->next = valToInsert;
+
                     dataSize++;
+
                     cout << "insertafter is increasing the count: " << dataSize << endl;
                 }
                 else return;
             }
             
         };
+
         void remove(T value) override{
             // TODO: Make this actually work
             // cout << "inside the remove function" << endl;
-            if (!isEmpty()){
+            if (isEmpty()){
                 return;
             }
             else{
@@ -110,6 +131,7 @@ class LinkedList : public LinkedListInterface<T>{
             }
             dataSize--;
         };
+
         void clear() override{
             // cout << "Inside the clear function" << endl;
             if (!isEmpty()){
@@ -128,6 +150,7 @@ class LinkedList : public LinkedListInterface<T>{
                 }
             }
          };
+
         T at(int index) override {
             // cout << "inside the at function"<< endl;
             if (index >= dataSize || index < 0 || !isEmpty()){
@@ -159,32 +182,38 @@ class LinkedList : public LinkedListInterface<T>{
         string toString() override{
             cout << "Inside the toString function" << endl;
             if (!isEmpty()){
+
                 stringstream ss;
+
                 cout << "Head is: " << head << " head data is: " << head->data << endl;
-                Node* pointer = head;
-                for (int i = 0; i < dataSize; i++){
-                    ss << pointer->data;
-                    if (pointer->next != nullptr)
+                
+                for (Node* pointer = head; pointer != nullptr; pointer = pointer->next){ 
+
+                    ss << pointer->data << ", ";
+
+                    if (pointer->next == nullptr)
                     {
+                        cout << "whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy" << endl;
                         ss << " ";
+                        break;
                     }
                     pointer = pointer->next;
                 }
                 return ss.str();
+                
             }
             else return "";
             
         };
 
         bool isEmpty() const {
-            // cout << "Inside the isEmpty function" << endl;
+            cout << "Inside the isEmpty function" << endl;
             return (dataSize <= 0 || head == nullptr);
         }
 
         bool existCheck(T value) {
             location = 0;
-            // cout << "Inside the existCheck function" << endl;
-            for (Node *pointer = head; pointer != nullptr; pointer = pointer->next){
+            for (Node* pointer = head; pointer != nullptr; pointer = pointer->next){
                 if (pointer->data == value){
                     return true;
                 };
