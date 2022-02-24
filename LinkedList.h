@@ -30,16 +30,9 @@ class LinkedList : public LinkedListInterface<T>{
  
 
         void insertHead(T value) override{
-            // cout << "inside the insertHead function" << endl;
             cout << "value is: " << value << endl;
             Node* headToInsert = new Node(value);
-            if (!isEmpty()){
-                head = headToInsert;
-                dataSize++;
-                cout << "insertHead is increasing the count: " << dataSize << endl;
-                // cout << "inserting into an empty array" << endl;  
-            }
-            else if(!existCheck(value)) {
+            if(!existCheck(value)) {
                 headToInsert->next = head;
                 head = headToInsert;
                 dataSize++;
@@ -51,8 +44,6 @@ class LinkedList : public LinkedListInterface<T>{
         };
 
         void insertTail(T value) override{
-            // TODO: Make this actually work
-            // cout << "inside the insetTail function" << endl;
             cout << "value is: " << value << endl;
             if (isEmpty()){
                 insertHead(value);
@@ -74,10 +65,10 @@ class LinkedList : public LinkedListInterface<T>{
 
         void insertAfter(T value, T insertionNode) override{
             if (existCheck(insertionNode) && !existCheck(value)){
-                cout << "value is: " << value << endl;
-                cout << "location is: " << location << endl;
-                cout << "dataSize is: " << dataSize << endl;
+
+                // This reset's location's value to match the amount of steps needed to get too the insertion point
                 existCheck(insertionNode);
+                
                 cout << "after location is: " << location << endl;
                 cout << "after dataSize is: " << dataSize << endl;
                 if (location <= dataSize){
@@ -102,8 +93,6 @@ class LinkedList : public LinkedListInterface<T>{
         };
 
         void remove(T value) override{
-            // TODO: Make this actually work
-            // cout << "inside the remove function" << endl;
             if (isEmpty()){
                 return;
             }
@@ -133,7 +122,6 @@ class LinkedList : public LinkedListInterface<T>{
         };
 
         void clear() override{
-            // cout << "Inside the clear function" << endl;
             if (!isEmpty()){
                 for (int i = 0; i < dataSize; i++){
                     Node* temp = head;
@@ -152,12 +140,10 @@ class LinkedList : public LinkedListInterface<T>{
          };
 
         T at(int index) override {
-            // cout << "inside the at function"<< endl;
             if (index >= dataSize || index < 0 || !isEmpty()){
                 throw std::out_of_range("AT Error");
             }
             else {
-                // TODO: Make this actually work
                 Node *pointer = head;
                 for (int i = 0; i < index; i++){
                     if (i == index){
@@ -168,14 +154,12 @@ class LinkedList : public LinkedListInterface<T>{
                     }
                 }
                 
-                // cout << "successfully completed the at function" << endl;
                 return pointer->data;
             }
             
         };
         
         int size() override {
-            // cout << "Inside the size function. Size: " << dataSize << endl;
             return dataSize;
         };
 
@@ -189,15 +173,16 @@ class LinkedList : public LinkedListInterface<T>{
                 
                 for (Node* pointer = head; pointer != nullptr; pointer = pointer->next){ 
 
-                    ss << pointer->data << ", ";
 
                     if (pointer->next == nullptr)
                     {
-                        cout << "whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy" << endl;
-                        ss << " ";
+                        ss << pointer->data;
+                        cout << "finished with the string stream" << endl;
                         break;
                     }
-                    pointer = pointer->next;
+                    else {
+                        ss << pointer->data << " ";
+                    }
                 }
                 return ss.str();
                 
@@ -207,7 +192,6 @@ class LinkedList : public LinkedListInterface<T>{
         };
 
         bool isEmpty() const {
-            cout << "Inside the isEmpty function" << endl;
             return (dataSize <= 0 || head == nullptr);
         }
 
