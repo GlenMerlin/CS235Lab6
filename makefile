@@ -1,2 +1,2 @@
 all:
-	g++ -g main.cpp -o llist
+	g++ -g main.cpp -o linked_list

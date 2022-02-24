@@ -30,16 +30,11 @@ class LinkedList : public LinkedListInterface<T>{
  
 
         void insertHead(T value) override{
-            cout << "value is: " << value << endl;
-            Node* headToInsert = new Node(value);
             if(!existCheck(value)) {
+                Node* headToInsert = new Node(value);
                 headToInsert->next = head;
                 head = headToInsert;
                 dataSize++;
-                cout << "insertHead is increasing the count: " << dataSize << endl;
-            }
-            else {
-                delete headToInsert;
             }
         };
 
@@ -57,8 +52,6 @@ class LinkedList : public LinkedListInterface<T>{
                         
                     pointer->next = tailToInsert;
                     dataSize++;
-
-                    cout << "insertTail is increasing the count: " << dataSize << endl;
             }
 
         };
@@ -82,10 +75,7 @@ class LinkedList : public LinkedListInterface<T>{
 
                     valToInsert->next = insertLoc->next;
                     insertLoc->next = valToInsert;
-
                     dataSize++;
-
-                    cout << "insertafter is increasing the count: " << dataSize << endl;
                 }
                 else return;
             }
@@ -98,49 +88,40 @@ class LinkedList : public LinkedListInterface<T>{
             }
             else{
                 if (existCheck(value)){
-                    if (location < 0){
-                        return;
-                    }
-                    else if (location == 0){
-                        Node* temp = head;
+                    if (value == head->data){
+                        Node* valToDelete = head;
                         head = head->next;
-                        delete temp;
-                        cout << "delete is lowering the counter to: " << dataSize << endl;
+                        delete valToDelete;
                         dataSize--;
-                        return;
                     }
                     else {
                         Node* pointer = head;
-                        for (int i = 0; i < location; i++){
-                            pointer->next;
+                        while (pointer!=nullptr){
+                            if (pointer->next->data == value){
+                                Node* nextVal = pointer->next;
+                                pointer->next = nextVal->next;
+                                delete nextVal;
+                                dataSize--;
+                                return;
+                            }
+                            else {
+                                pointer = pointer->next;
+                            }
                         }
-                        delete pointer;
                     }
                 }
             }
-            dataSize--;
         };
 
         void clear() override{
-            if (!isEmpty()){
-                for (int i = 0; i < dataSize; i++){
-                    Node* temp = head;
-                    if (head->next != nullptr){
-                        head = head->next;
-                        delete temp;
-                        dataSize--;
-                    }
-                    else {
-                        head = nullptr;
-                        dataSize = 0;
-                        return;
-                    }
-                }
+            while (head != nullptr){
+                remove(head->data);
             }
+            dataSize = 0;
          };
 
         T at(int index) override {
-            if (index >= dataSize || index < 0 || !isEmpty()){
+            if (index >= dataSize || index < 0 || isEmpty()){
                 throw std::out_of_range("AT Error");
             }
             else {
@@ -153,8 +134,8 @@ class LinkedList : public LinkedListInterface<T>{
                         pointer = pointer->next;
                     }
                 }
-                
-                return pointer->data;
+                T returnVal = pointer->data;
+                return returnVal;
             }
             
         };
@@ -164,12 +145,9 @@ class LinkedList : public LinkedListInterface<T>{
         };
 
         string toString() override{
-            cout << "Inside the toString function" << endl;
             if (!isEmpty()){
 
                 stringstream ss;
-
-                cout << "Head is: " << head << " head data is: " << head->data << endl;
                 
                 for (Node* pointer = head; pointer != nullptr; pointer = pointer->next){ 
 
@@ -177,7 +155,6 @@ class LinkedList : public LinkedListInterface<T>{
                     if (pointer->next == nullptr)
                     {
                         ss << pointer->data;
-                        cout << "finished with the string stream" << endl;
                         break;
                     }
                     else {
@@ -188,7 +165,6 @@ class LinkedList : public LinkedListInterface<T>{
                 
             }
             else return "";
-            
         };
 
         bool isEmpty() const {
