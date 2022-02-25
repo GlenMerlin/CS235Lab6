@@ -1,0 +1,5 @@
+make all --dry-run --keep-going --print-directory
+make: Entering directory '/home/glenmerlin/CS 235/CS235Lab6'
+g++ -g main.cpp -o linked_list
+make: Leaving directory '/home/glenmerlin/CS 235/CS235Lab6'
+ 

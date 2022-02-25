@@ -30,6 +30,7 @@ class LinkedList : public LinkedListInterface<T>{
  
 
         void insertHead(T value) override{
+            cout << "this is a test" << endl;
             if(!existCheck(value)) {
                 Node* headToInsert = new Node(value);
                 headToInsert->next = head;
